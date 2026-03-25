@@ -4,6 +4,6 @@ export interface SkillPost {
   campusId: string;
   teachingSkill: string;
   wantedSkills: string[];
-  thumbnailUrl?: string; // Additional field suggested by Prompt: 'Thumbnail URL'
+  thumbnailUrl: string; // Mandatory field
   description?: string; // Additional field suggested by Prompt: 'Description'
 }

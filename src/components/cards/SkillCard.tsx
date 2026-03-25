@@ -22,32 +22,24 @@ export function SkillCard({ post, index = 0 }: SkillCardProps) {
       <Card className="overflow-hidden border-0 shadow-sm bg-white hover:shadow-xl transition-all duration-500 group rounded-[1.5rem] cursor-pointer relative top-0 hover:-top-2">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none z-0"></div>
         
-        {post.thumbnailUrl && (
-          <div className="relative w-full aspect-[4/3] overflow-hidden rounded-t-[1.5rem]">
-            <div className="absolute inset-0 bg-gray-900/10 z-10 group-hover:bg-transparent transition-colors duration-500"></div>
-            <Image
-              src={post.thumbnailUrl}
-              alt={`${post.teachingSkill} thumbnail`}
-              fill
-              className="object-cover transition-transform duration-700 group-hover:scale-110"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
-            <div className="absolute top-4 left-4 z-20">
-              <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-white/90 backdrop-blur-md text-gray-900 shadow-sm">
-                <MapPin size={12} className="mr-1 text-primary" />
-                {post.campusId}
-              </span>
-            </div>
+        <div className="relative w-full aspect-[4/3] overflow-hidden rounded-t-[1.5rem]">
+          <div className="absolute inset-0 bg-gray-900/10 z-10 group-hover:bg-transparent transition-colors duration-500"></div>
+          <Image
+            src={post.thumbnailUrl}
+            alt={`${post.teachingSkill} thumbnail`}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+          <div className="absolute top-4 left-4 z-20">
+            <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-white/90 backdrop-blur-md text-gray-900 shadow-sm">
+              <MapPin size={12} className="mr-1 text-primary" />
+              {post.campusId}
+            </span>
           </div>
-        )}
+        </div>
 
         <CardContent className="p-6 relative z-10">
-          {!post.thumbnailUrl && (
-            <div className="flex items-center space-x-2 text-xs text-gray-500 mb-4 font-medium bg-gray-100/50 inline-flex px-2.5 py-1 rounded-full">
-              <MapPin size={14} className="text-primary" />
-              <span>{post.campusId}</span>
-            </div>
-          )}
           
           <div className="space-y-5">
             <div>
