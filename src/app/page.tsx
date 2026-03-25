@@ -3,7 +3,7 @@
 import { SkillPost } from "@/types";
 import { SkillCard } from "@/components/cards/SkillCard";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { SearchX, Filter, Sparkles, TrendingUp, Star, ChevronDown, ArrowRight, Check } from "lucide-react";
+import { SearchX, Filter, TrendingUp, Star, ChevronDown, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 
