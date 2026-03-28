@@ -92,15 +92,15 @@ export default function Home() {
           <div className="inline-flex items-center space-x-2 bg-gray-50 border border-gray-200 px-4 py-1.5 rounded-full text-gray-800 text-sm font-semibold mb-8">
             <span>Join the Community</span>
           </div>
-          
+
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight">
             Learn New Skills by<br className="hidden sm:block" /> Trading Your Expertise
           </h1>
-          
+
           <p className="text-lg text-gray-500 mb-10 max-w-2xl leading-relaxed">
             SkillExchange connects you with people who want to learn what you know, and teach what you want to learn. Exchange skills, earn badges, and grow together.
           </p>
-          
+
           <div className="flex sm:flex-row flex-col gap-4 mb-10 w-full sm:w-auto justify-center items-center">
             <Button size="lg" className="bg-gray-900 text-white hover:bg-gray-800 font-semibold rounded-full px-8 h-12 shadow-md w-full sm:w-auto transition-all">
               Start Exchanging <ArrowRight size={18} className="ml-2" />
@@ -111,9 +111,9 @@ export default function Home() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-gray-500 font-medium">
-             <span className="flex items-center"><Check size={16} className="mr-1.5 text-gray-900" /> Free to join</span>
-             <span className="flex items-center"><Check size={16} className="mr-1.5 text-gray-900" /> No subscriptions</span>
-             <span className="flex items-center"><Check size={16} className="mr-1.5 text-gray-900" /> Real connections</span>
+            <span className="flex items-center"><Check size={16} className="mr-1.5 text-gray-900" /> Free to join</span>
+            <span className="flex items-center"><Check size={16} className="mr-1.5 text-gray-900" /> No subscriptions</span>
+            <span className="flex items-center"><Check size={16} className="mr-1.5 text-gray-900" /> Real connections</span>
           </div>
         </div>
       </motion.section>
