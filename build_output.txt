@@ -1,0 +1,31 @@
+
+> skills_exchange_frontend@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/7) ...
+   Generating static pages (1/7) 
+   Generating static pages (3/7) 
+   Generating static pages (5/7) 
+ ✓ Generating static pages (7/7)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    12.1 kB         148 kB
+├ ○ /_not-found                          873 B          88.2 kB
+├ ○ /profile                             3.04 kB         139 kB
+└ ○ /search                              138 B          87.5 kB
++ First Load JS shared by all            87.3 kB
+  ├ chunks/117-c86a41b869f6b521.js       31.7 kB
+  ├ chunks/fd9d1056-6922f449a204c2cc.js  53.6 kB
+  └ other shared chunks (total)          1.95 kB
+
+
+○  (Static)  prerendered as static content
+

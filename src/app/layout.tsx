@@ -8,8 +8,9 @@ import { CreatePostModal } from "@/components/modals/CreatePostModal";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Skill Exchange Platform | Barter Skills",
-  description: "A high-performance skill exchange barter platform for students.",
+  title: "Skill Exchange Platform",
+  description:
+    "A high-performance skill exchange barter platform for students.",
 };
 
 export default function RootLayout({
@@ -19,11 +20,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased block overflow-x-hidden`}>
+      <body
+        className={`${inter.className} antialiased block overflow-x-hidden`}
+      >
         <ModalProvider>
-          <Shell>
-            {children}
-          </Shell>
+          <Shell>{children}</Shell>
           <CreatePostModal />
         </ModalProvider>
       </body>
