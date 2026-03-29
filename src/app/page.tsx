@@ -6,6 +6,7 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { SearchX, Filter, TrendingUp, Star, ChevronDown, ArrowRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 // Mock Data for initial UI
 const mockPosts: SkillPost[] = [
@@ -168,22 +169,13 @@ export default function Home() {
       {/* Feed Controls */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 px-2">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-            <TrendingUp size={20} />
-          </div>
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center">
               Trending Exchanges
             </h2>
-            <p className="text-gray-500 text-sm mt-0.5">Most requested skills in your area right now.</p>
           </div>
         </div>
-        <div className="flex items-center gap-2 self-end sm:self-auto">
-          <Button variant="outline" size="sm" className="hidden sm:flex rounded-full px-5 font-medium border-gray-200 shadow-sm hover:shadow-md transition-all">
-            <Filter size={16} className="mr-2" />
-            Filter by Campus
-          </Button>
-        </div>
+
       </div>
 
       {hasPosts ? (
@@ -193,13 +185,16 @@ export default function Home() {
               <SkillCard key={post.id} post={post} index={i} />
             ))}
           </div>
-          {mockPosts.length >= 8 && (
+
+          <Link href="/skills">
             <div className="flex justify-center mt-12 pb-4">
               <Button size="lg" className="rounded-full px-12 font-semibold shadow-md border border-gray-200">
                 See more
               </Button>
             </div>
-          )}
+
+          </Link>
+
         </div>
       ) : (
         <EmptyState
@@ -211,7 +206,7 @@ export default function Home() {
       )}
 
       {/* Reviews Section */}
-      <section className="py-20 border-t border-gray-100 mt-16 mb-4">
+      <section className="py-20 mt-16 mb-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Loved by Learners Everywhere</h2>
           <p className="text-gray-500 max-w-2xl mx-auto">See what our community members have to say about their skill exchange experiences.</p>
