@@ -72,7 +72,7 @@ export function CreatePostModal() {
               ? errorData.message[0]
               : errorData.message;
           }
-        } catch (err) {
+        } catch {
         }
         throw new Error(errorMessage);
       }
@@ -93,9 +93,10 @@ export function CreatePostModal() {
           description: "",
         });
       }, 300);
-    } catch (error: any) {
+    } catch (error) {
       console.error("Error creating post:", error);
-      toast.error(error.message || "Failed to create post. Please try again.");
+      const errorMessage = error instanceof Error ? error.message : "Failed to create post. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
