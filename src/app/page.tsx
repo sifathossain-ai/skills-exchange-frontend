@@ -106,9 +106,11 @@ export default function Home() {
             <Button size="lg" className="bg-gray-900 text-white hover:bg-gray-800 font-semibold rounded-full px-8 h-12 shadow-md w-full sm:w-auto transition-all">
               Start Exchanging <ArrowRight size={18} className="ml-2" />
             </Button>
-            <Button size="lg" variant="outline" className="border-gray-200 text-gray-700 bg-white hover:bg-gray-50 font-semibold rounded-full px-8 h-12 w-full sm:w-auto shadow-sm">
-              Browse Skills
-            </Button>
+            <Link href="/skills">
+              <Button size="lg" variant="outline" className="border-gray-200 text-gray-700 bg-white hover:bg-gray-50 font-semibold rounded-full px-8 h-12 w-full sm:w-auto shadow-sm">
+                Browse Skills
+              </Button>
+            </Link>
           </div>
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-gray-500 font-medium">
