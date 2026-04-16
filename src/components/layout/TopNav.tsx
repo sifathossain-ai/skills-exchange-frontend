@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { useModal } from "@/context/ModalContext";
 
 export function TopNav() {
@@ -37,6 +37,13 @@ export function TopNav() {
             </Link>
           </nav>
           <div className="flex items-center space-x-3">
+            <Link
+              href="/skills"
+              className="p-2.5 outline-none rounded-full text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-all focus:bg-gray-100 focus:text-gray-900 cursor-pointer"
+              aria-label="Search Skills"
+            >
+              <Search size={20} />
+            </Link>
             <button
               onClick={openCreatePost}
               className="group relative h-10 px-5 inline-flex items-center justify-center rounded-full text-sm font-semibold transition-all bg-gray-900 text-white hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5"
