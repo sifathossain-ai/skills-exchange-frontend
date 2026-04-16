@@ -7,17 +7,20 @@ import { Input } from "@/components/ui/input";
 import { useModal } from "@/context/ModalContext";
 import { X, Plus, Image as ImageIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-toastify";
 
 export function CreatePostModal() {
   const { isCreatePostOpen, closeCreatePost } = useModal();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     teachingSkill: "",
+    category: "",
     thumbnailUrl: "",
     wantedSkills: [] as string[],
     description: "",
   });
   const [tagInput, setTagInput] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleBack = () => setStep((s) => Math.max(s - 1, 1));
 
@@ -38,19 +41,64 @@ export function CreatePostModal() {
     });
   };
 
-  const handleSubmit = () => {
-    // API integration will go here
-    console.log("Submitting:", formData);
-    closeCreatePost();
-    setTimeout(() => {
-      setStep(1);
-      setFormData({
-        teachingSkill: "",
-        thumbnailUrl: "",
-        wantedSkills: [],
-        description: "",
+  const handleSubmit = async () => {
+    try {
+      setIsSubmitting(true);
+      const { thumbnailUrl, ...rest } = formData;
+
+      const payload = {
+        ...rest,
+        // Backend DTO expects 'skillImage', so we rename it here. We add a fallback URL just in case testing with an empty string fails.
+        skillImage: thumbnailUrl || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop"
+      };
+
+      const res = await fetch("http://localhost:3000/skills/post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFyYWZhdEBnbWFpbC5jb20iLCJzdWIiOiJlYTgwMTAwMy02MzMzLTQ3MzktOWE4YS0xYThmM2JhMjFjZDUiLCJyb2xlIjoidXNlciIsImlhdCI6MTc3NTA2NzI3NywiZXhwIjoxNzc1MTUzNjc3fQ.99HBbdJVEk7uB3Nd0vx22yb4Y8KRFaTqZGyLLhvHLwE`,
+        },
+        credentials: "include",
+        body: JSON.stringify(payload),
       });
-    }, 300);
+
+      if (!res.ok) {
+        let errorMessage = "Failed to create post. Check your data.";
+        try {
+          const errorData = await res.json();
+          console.log("Backend error details:", errorData);
+          if (errorData.message) {
+            errorMessage = Array.isArray(errorData.message)
+              ? errorData.message[0]
+              : errorData.message;
+          }
+        } catch (err) {
+        }
+        throw new Error(errorMessage);
+      }
+
+      const data = await res.json();
+      console.log("Success:", data);
+
+      toast.success("Skill post successfully created!");
+
+      closeCreatePost();
+      setTimeout(() => {
+        setStep(1);
+        setFormData({
+          teachingSkill: "",
+          category: "",
+          thumbnailUrl: "",
+          wantedSkills: [],
+          description: "",
+        });
+      }, 300);
+    } catch (error: any) {
+      console.error("Error creating post:", error);
+      toast.error(error.message || "Failed to create post. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const slideVariants = {
@@ -219,18 +267,50 @@ export function CreatePostModal() {
               transition={{ duration: 0.3 }}
               className="space-y-5"
             >
-              <div>
-                <label className="block text-sm font-bold text-gray-900 mb-2">
-                  Description
-                </label>
-                <textarea
-                  className="flex min-h-[140px] w-full rounded-xl border border-gray-200 bg-gray-50/50 hover:bg-gray-50 focus:bg-white px-4 py-3 text-sm ring-offset-white placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors resize-none"
-                  placeholder="Describe your barter offer in detail. What exactly will you teach? What exactly do you expect from the other person?"
-                  value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
-                />
+              <div className="space-y-5">
+                <div>
+                  <label className="block text-sm font-bold text-gray-900 mb-2">
+                    Category
+                  </label>
+                  <div className="relative">
+                    <select
+                      className="flex h-12 w-full appearance-none rounded-xl border border-gray-200 bg-gray-50/50 hover:bg-gray-50 focus:bg-white px-4 text-sm ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors"
+                      value={formData.category}
+                      onChange={(e) =>
+                        setFormData({ ...formData, category: e.target.value })
+                      }
+                    >
+                      <option value="" disabled>Select a category</option>
+                      <option value="Web Development">Web Development</option>
+                      <option value="UI/UX Design">UI/UX Design</option>
+                      <option value="Data Science & AI">Data Science & AI</option>
+                      <option value="Digital Marketing">Digital Marketing</option>
+                      <option value="Language & Communication">Language & Communication</option>
+                      <option value="Business & Finance">Business & Finance</option>
+                      <option value="Music & Arts">Music & Arts</option>
+                      <option value="Health & Fitness">Health & Fitness</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                      <svg className="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-gray-900 mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    className="flex min-h-[70px] w-full rounded-xl border border-gray-200 bg-gray-50/50 hover:bg-gray-50 focus:bg-white px-4 py-3 text-sm ring-offset-white placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors resize-none"
+                    placeholder="Describe your barter offer in detail. What exactly will you teach? What exactly do you expect from the other person?"
+                    value={formData.description}
+                    onChange={(e) =>
+                      setFormData({ ...formData, description: e.target.value })
+                    }
+                  />
+                </div>
               </div>
             </motion.div>
           )}
@@ -247,9 +327,10 @@ export function CreatePostModal() {
 
           <Button
             onClick={step === 3 ? handleSubmit : () => setStep((s) => s + 1)}
-            className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 shadow-lg shadow-blue-600/30 transition-all hover:-translate-y-0.5"
+            disabled={isSubmitting}
+            className={`bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-8 shadow-lg shadow-blue-600/30 transition-all ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:-translate-y-0.5'}`}
           >
-            {step === 3 ? "Post Skill" : "Next Step"}
+            {isSubmitting ? "Posting..." : step === 3 ? "Post Skill" : "Next Step"}
           </Button>
         </div>
       </div>

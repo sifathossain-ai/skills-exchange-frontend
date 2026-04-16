@@ -4,6 +4,8 @@ import "./globals.css";
 import { Shell } from "@/components/layout/Shell";
 import { ModalProvider } from "@/context/ModalContext";
 import { CreatePostModal } from "@/components/modals/CreatePostModal";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +28,7 @@ export default function RootLayout({
         <ModalProvider>
           <Shell>{children}</Shell>
           <CreatePostModal />
+          <ToastContainer position="top-right" autoClose={3000} theme="colored" />
         </ModalProvider>
       </body>
     </html>
