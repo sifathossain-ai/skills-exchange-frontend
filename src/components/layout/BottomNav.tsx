@@ -14,7 +14,7 @@ export function BottomNav() {
           <Link href="/" className="flex flex-col items-center justify-center w-14 h-14 rounded-2xl text-gray-500 hover:bg-gray-100/50 hover:text-gray-900 transition-all active:scale-95">
             <Home size={22} strokeWidth={2.5} />
           </Link>
-          <Link href="/search" className="flex flex-col items-center justify-center w-14 h-14 rounded-2xl text-gray-500 hover:bg-gray-100/50 hover:text-gray-900 transition-all active:scale-95">
+          <Link href="/skills" className="flex flex-col items-center justify-center w-14 h-14 rounded-2xl text-gray-500 hover:bg-gray-100/50 hover:text-gray-900 transition-all active:scale-95">
             <Search size={22} strokeWidth={2.5} />
           </Link>
           
