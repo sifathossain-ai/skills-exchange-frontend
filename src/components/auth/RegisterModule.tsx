@@ -62,10 +62,11 @@ export function RegisterModule({ onRegister, onGoToLogin }: RegisterModuleProps)
 
       toast.success("Account created successfully!");
       onRegister();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Register error:", err);
-      setError(err.message || "An error occurred during registration");
-      toast.error(err.message || "Registration failed");
+      const errorMessage = err instanceof Error ? err.message : "An error occurred during registration";
+      setError(errorMessage);
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }

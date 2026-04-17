@@ -43,9 +43,10 @@ export function LoginModule({ onLogin, onGoToRegister }: LoginModuleProps) {
 
       toast.success("Welcome back!");
       onLogin();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Login error:", err);
-      toast.error(err.message || "Invalid credentials");
+      const errorMessage = err instanceof Error ? err.message : "Invalid credentials";
+      toast.error(errorMessage);
     } finally {
       setIsLoading(false);
     }
