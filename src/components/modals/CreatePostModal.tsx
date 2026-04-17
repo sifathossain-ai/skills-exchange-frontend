@@ -52,11 +52,13 @@ export function CreatePostModal() {
         skillImage: thumbnailUrl || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop"
       };
 
+      const token = localStorage.getItem("accessToken");
+      
       const res = await fetch("http://localhost:3000/skills/post", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFyYWZhdEBnbWFpbC5jb20iLCJzdWIiOiJlYTgwMTAwMy02MzMzLTQ3MzktOWE4YS0xYThmM2JhMjFjZDUiLCJyb2xlIjoidXNlciIsImlhdCI6MTc3NTA2NzI3NywiZXhwIjoxNzc1MTUzNjc3fQ.99HBbdJVEk7uB3Nd0vx22yb4Y8KRFaTqZGyLLhvHLwE`,
+          "Authorization": token ? `Bearer ${token}` : "",
         },
         credentials: "include",
         body: JSON.stringify(payload),

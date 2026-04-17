@@ -1,10 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2, CheckCircle, XCircle, MapPin, Award, ShieldCheck } from "lucide-react";
+import { Edit, Trash2, CheckCircle, XCircle, MapPin, Award, ShieldCheck, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState } from "react";
+import { LoginModule } from "@/components/auth/LoginModule";
+import { RegisterModule } from "@/components/auth/RegisterModule";
 
 export default function Profile() {
+  const [authMode, setAuthMode] = useState<'login' | 'register' | 'authenticated'>('login');
   const mySkills = [
     {
       id: "1",
@@ -22,6 +26,14 @@ export default function Profile() {
       status: "pending"
     }
   ];
+
+  if (authMode === 'login') {
+    return <LoginModule onLogin={() => setAuthMode('authenticated')} onGoToRegister={() => setAuthMode('register')} />;
+  }
+  
+  if (authMode === 'register') {
+    return <RegisterModule onRegister={() => setAuthMode('authenticated')} onGoToLogin={() => setAuthMode('login')} />;
+  }
 
   return (
     <div className="space-y-10 max-w-6xl mx-auto px-4 sm:px-0">
@@ -52,9 +64,18 @@ export default function Profile() {
               <span className="flex items-center"><Award size={16} className="mr-1.5 text-orange-500" /> 2 Successful Trades</span>
             </div>
             
-            <Button className="bg-gray-900 hover:bg-gray-800 text-white rounded-xl px-8 shadow-md">
-              Edit Profile
-            </Button>
+            <div className="flex gap-3 mt-2">
+              <Button className="bg-gray-900 hover:bg-gray-800 text-white rounded-xl px-8 shadow-md">
+                Edit Profile
+              </Button>
+              <Button 
+                variant="outline" 
+                onClick={() => setAuthMode('login')}
+                className="rounded-xl px-4 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+              >
+                <LogOut size={18} className="mr-2" /> Logout
+              </Button>
+            </div>
           </div>
         </div>
       </motion.div>
