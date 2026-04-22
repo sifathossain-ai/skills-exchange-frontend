@@ -8,73 +8,10 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-// Mock Data for initial UI
-const mockPosts: SkillPost[] = [
-  {
-    id: "1",
-    name: "Rahim Ali",
-    campusId: "NSU-2023",
-    teachingSkill: "Advanced React & Next.js",
-    wantedSkills: ["UI/UX Design", "Figma"],
-    thumbnailUrl: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?q=80&w=800&auto=format&fit=crop",
-    description: "I can teach you modern frontend development in exchange for some solid design help for my startup idea.",
-  },
-  {
-    id: "2",
-    name: "Fatima Begum",
-    campusId: "BRACU-01",
-    teachingSkill: "IELTS Preparation (Band 8)",
-    wantedSkills: ["Python Programming", "Data Sci"],
-    thumbnailUrl: "https://images.unsplash.com/photo-1513258496099-48168024aec0?q=80&w=800&auto=format&fit=crop",
-    description: "Looking for someone to teach me basic Python in exchange for spoken English and IELTS tips.",
-  },
-  {
-    id: "3",
-    name: "Sajid Hasan",
-    campusId: "IUB-CS",
-    teachingSkill: "Digital Marketing & SEO",
-    wantedSkills: ["Video Editing", "Premiere Pro"],
-    thumbnailUrl: "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: "4",
-    name: "Anika Tabassum",
-    campusId: "DU-12",
-    teachingSkill: "Graphic Design Basics",
-    wantedSkills: ["Guitar Lessons"],
-    thumbnailUrl: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=800&auto=format&fit=crop",
-    description: "I am a fine arts student. I can teach you photoshop if you have an acoustic guitar and can teach me to play.",
-  },
-  {
-    id: "5",
-    name: "Jihad Rahman",
-    campusId: "AUST-ME",
-    teachingSkill: "AutoCAD & 3D Modeling",
-    wantedSkills: ["Calculus II", "Physics"],
-    thumbnailUrl: "https://images.unsplash.com/photo-1525909002-1b05e0c869d8?q=80&w=800&auto=format&fit=crop",
-    description: "Willing to do mechanical drafting tutoring for serious math/physics guidance before midterms.",
-  },
-  {
-    id: "6",
-    name: "Nusrat Jahan",
-    campusId: "EWU-BBA",
-    teachingSkill: "Accounting Principles",
-    wantedSkills: ["Public Speaking"],
-    thumbnailUrl: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=800&auto=format&fit=crop",
-  },
-  {
-    id: "7",
-    name: "Tariq Mahmud",
-    campusId: "UIU-CSE",
-    teachingSkill: "Data Structures in C++",
-    wantedSkills: ["Photography", "Lightroom"],
-    thumbnailUrl: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=800&auto=format&fit=crop",
-    description: "If you have a DSLR and can teach me the basics, I will get you through your C++ course smoothly.",
-  },
-];
+import { fakeProducts } from "@/lib/data";
 
 export default function Home() {
-  const hasPosts = mockPosts.length > 0;
+  const hasPosts = fakeProducts.length > 0;
 
   return (
     <div className="space-y-12">
@@ -181,7 +118,7 @@ export default function Home() {
       {hasPosts ? (
         <div className="space-y-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {mockPosts.slice(0, 8).map((post, i) => (
+            {fakeProducts.slice(0, 8).map((post, i) => (
               <SkillCard key={post.id} post={post} index={i} />
             ))}
           </div>
