@@ -37,7 +37,6 @@ export function RegisterModule({ onRegister, onGoToLogin }: RegisterModuleProps)
     }
 
     setIsLoading(true);
-
     try {
       const response = await fetch("http://localhost:3000/auth/register", {
         method: "POST",
@@ -53,7 +52,6 @@ export function RegisterModule({ onRegister, onGoToLogin }: RegisterModuleProps)
       });
 
       console.log(response);
-
       const data = await response.json().catch(() => null);
 
       if (!response.ok) {
@@ -62,11 +60,10 @@ export function RegisterModule({ onRegister, onGoToLogin }: RegisterModuleProps)
 
       toast.success("Account created successfully!");
       onRegister();
-    } catch (err: unknown) {
+    } catch (err: any) {
       console.error("Register error:", err);
-      const errorMessage = err instanceof Error ? err.message : "An error occurred during registration";
-      setError(errorMessage);
-      toast.error(errorMessage);
+      setError(err.message || "An error occurred during registration");
+      toast.error(err.message || "Registration failed");
     } finally {
       setIsLoading(false);
     }

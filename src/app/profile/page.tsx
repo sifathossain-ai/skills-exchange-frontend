@@ -1,41 +1,105 @@
 "use client";
 
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Edit, Trash2, CheckCircle, XCircle, MapPin, Award, ShieldCheck, Save, X } from "lucide-react";
+import { Edit, Trash2, CheckCircle, XCircle, MapPin, Award, ShieldCheck, LogOut, Save, X } from "lucide-react";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { LoginModule } from "@/components/auth/LoginModule";
+import { RegisterModule } from "@/components/auth/RegisterModule";
+import { Input } from "@/components/ui/input";
 
 export default function Profile() {
+  const [isMounted, setIsMounted] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'register' | 'authenticated'>('login');
+  const [user, setUser] = useState<{ name: string; campusId: string | null } | null>(null);
+
   const [isEditing, setIsEditing] = useState(false);
-  const [name, setName] = useState("Rahim Ali");
-  const [campus, setCampus] = useState("North South University");
-  const [tempName, setTempName] = useState("Rahim Ali");
-  const [tempCampus, setTempCampus] = useState("North South University");
+  const [tempName, setTempName] = useState("");
+  const [tempCampus, setTempCampus] = useState("");
+
+  const [mySkills, setMySkills] = useState<any[]>([]);
+  const [isLoadingSkills, setIsLoadingSkills] = useState(true);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const token = localStorage.getItem("accessToken");
+    const storedUser = localStorage.getItem("user");
+    if (token && storedUser) {
+      setAuthMode('authenticated');
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setTempName(parsedUser.name || "");
+        setTempCampus(parsedUser.campusId || "");
+      } catch (e) { }
+    }
+  }, []);
+
+  const refreshUser = () => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setTempName(parsedUser.name || "");
+        setTempCampus(parsedUser.campusId || "");
+      } catch (e) { }
+    }
+    setAuthMode('authenticated');
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("user");
+    setUser(null);
+    setAuthMode('login');
+  };
+
+  useEffect(() => {
+    const fetchMySkills = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return;
+
+        const res = await fetch("http://localhost:3000/skills/my-skills", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setMySkills(data);
+        }
+      } catch (error) {
+        console.error("Error fetching skills:", error);
+      } finally {
+        setIsLoadingSkills(false);
+      }
+    };
+
+    if (authMode === 'authenticated') {
+      fetchMySkills();
+    }
+  }, [authMode]);
 
   const handleEdit = () => {
-    setTempName(name);
-    setTempCampus(campus);
+    setTempName(user?.name || "");
+    setTempCampus(user?.campusId || "");
     setIsEditing(true);
   };
 
   const handleSave = () => {
-    setName(tempName);
-    setCampus(tempCampus);
+    const updatedUser = { ...user, name: tempName, campusId: tempCampus };
+    setUser(updatedUser as any);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
     setIsEditing(false);
   };
 
   const handleCancel = () => {
     setIsEditing(false);
   };
-
-  const mySkills = [
-    {
-      id: "1",
-      teaching: "Advanced React & Next.js",
-      wanted: ["UI/UX Design", "Figma"],
-    }
-  ];
 
   const tradeRequests = [
     {
@@ -46,6 +110,16 @@ export default function Profile() {
       status: "pending"
     }
   ];
+
+  if (!isMounted) return null;
+
+  if (authMode === 'login') {
+    return <LoginModule onLogin={refreshUser} onGoToRegister={() => setAuthMode('register')} />;
+  }
+
+  if (authMode === 'register') {
+    return <RegisterModule onRegister={refreshUser} onGoToLogin={() => setAuthMode('login')} />;
+  }
 
   return (
     <div className="space-y-10 max-w-6xl mx-auto px-4 sm:px-0">
@@ -60,8 +134,8 @@ export default function Profile() {
 
         <div className="flex flex-col md:flex-row items-center md:items-start gap-8 z-10 relative">
           <div className="w-32 h-32 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 p-1 shadow-lg shadow-blue-500/20">
-            <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-4xl font-black text-blue-600">
-              R
+            <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-4xl font-black text-blue-600 uppercase">
+              {user?.name ? user.name.charAt(0) : "U"}
             </div>
           </div>
 
@@ -70,6 +144,7 @@ export default function Profile() {
               <ShieldCheck size={14} />
               <span>Verified Student</span>
             </div>
+
             {isEditing ? (
               <div className="space-y-4 mb-6">
                 <div>
@@ -82,26 +157,31 @@ export default function Profile() {
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Campus Name</label>
+                  <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Campus ID</label>
                   <Input
                     value={tempCampus}
                     onChange={(e) => setTempCampus(e.target.value)}
                     className="max-w-md bg-gray-50 border-gray-200 rounded-xl"
-                    placeholder="Enter campus name"
+                    placeholder="Enter campus ID"
                   />
                 </div>
               </div>
             ) : (
               <>
-                <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">{name}</h1>
+                <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-2">
+                  {user?.name || "Student"}
+                </h1>
                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-sm font-medium text-gray-500 mb-6">
-                  <span className="flex items-center"><MapPin size={16} className="mr-1.5 text-blue-500" /> {campus}</span>
+                  <span className="flex items-center">
+                    <MapPin size={16} className="mr-1.5 text-blue-500" />
+                    {user?.campusId ? `Campus ID: ${user.campusId}` : "Campus ID: Not Updated"}
+                  </span>
                   <span className="flex items-center"><Award size={16} className="mr-1.5 text-orange-500" /> 2 Successful Trades</span>
                 </div>
               </>
             )}
 
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mt-2">
               {isEditing ? (
                 <>
                   <Button
@@ -119,12 +199,21 @@ export default function Profile() {
                   </Button>
                 </>
               ) : (
-                <Button
-                  onClick={handleEdit}
-                  className="bg-gray-900 hover:bg-gray-800 text-white rounded-xl px-8 shadow-md"
-                >
-                  <Edit size={18} className="mr-2" /> Edit Profile
-                </Button>
+                <>
+                  <Button
+                    onClick={handleEdit}
+                    className="bg-gray-900 hover:bg-gray-800 text-white rounded-xl px-8 shadow-md"
+                  >
+                    <Edit size={18} className="mr-2" /> Edit Profile
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={handleLogout}
+                    className="rounded-xl px-4 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+                  >
+                    <LogOut size={18} className="mr-2" /> Logout
+                  </Button>
+                </>
               )}
             </div>
           </div>
@@ -139,7 +228,11 @@ export default function Profile() {
             <h2 className="text-2xl font-bold text-gray-900">My Active Posts</h2>
           </div>
 
-          {mySkills.length === 0 ? (
+          {isLoadingSkills ? (
+            <div className="flex justify-center p-12">
+              <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : mySkills.length === 0 ? (
             <div className="text-center p-12 bg-white rounded-[2rem] border border-dashed border-gray-200 shadow-sm">
               <p className="text-gray-500 font-medium tracking-wide">You haven&apos;t posted any skills yet.</p>
             </div>
@@ -151,15 +244,15 @@ export default function Profile() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                   key={skill.id}
-                  className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden hover:shadow-lg transition-all"
+                  className="bg-white rounded-[1rem] border border-gray-100 shadow-sm overflow-hidden hover:shadow-lg transition-all"
                 >
                   <div className="p-8 sm:flex items-center justify-between gap-6">
                     <div className="flex-1">
                       <div className="text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2">Teaching</div>
-                      <h3 className="text-2xl font-extrabold text-gray-900 mb-4">{skill.teaching}</h3>
+                      <h3 className="text-2xl font-extrabold text-gray-900 mb-4">{skill.teachingSkill}</h3>
                       <div className="text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2">Wanted in return</div>
                       <div className="flex flex-wrap gap-2">
-                        {skill.wanted.map(w => (
+                        {skill.wantedSkills?.map((w: string) => (
                           <span key={w} className="px-3 py-1 bg-gray-50 border border-gray-100 rounded-lg text-sm font-semibold text-gray-700">{w}</span>
                         ))}
                       </div>
@@ -194,7 +287,7 @@ export default function Profile() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
                   key={req.id}
-                  className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all"
+                  className="bg-white p-6 rounded-[1rem] border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all"
                 >
                   <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-500 group-hover:bg-blue-600 transition-colors"></div>
 
