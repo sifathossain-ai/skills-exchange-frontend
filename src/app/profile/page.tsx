@@ -98,7 +98,7 @@ export default function Profile() {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative bg-white rounded-[1rem] p-8 sm:p-12 shadow-xl shadow-blue-900/5 border border-gray-100 overflow-hidden"
+        className="relative bg-white rounded-[2rem] p-8 sm:p-12 shadow-xl shadow-blue-900/5 border border-gray-100 overflow-hidden"
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-blue-100 to-transparent rounded-full blur-3xl opacity-50 -z-10"></div>
 
