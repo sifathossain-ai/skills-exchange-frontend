@@ -40,13 +40,36 @@ export default function Profile() {
     setUser(null);
     setAuthMode('login');
   };
-  const mySkills = [
-    {
-      id: "1",
-      teaching: "Advanced React & Next.js",
-      wanted: ["UI/UX Design", "Figma"],
+  const [mySkills, setMySkills] = useState<any[]>([]);
+  const [isLoadingSkills, setIsLoadingSkills] = useState(true);
+
+  useEffect(() => {
+    const fetchMySkills = async () => {
+      try {
+        const token = localStorage.getItem("accessToken");
+        if (!token) return;
+
+        const res = await fetch("http://localhost:3000/skills/my-skills", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+          },
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setMySkills(data);
+        }
+      } catch (error) {
+        console.error("Error fetching skills:", error);
+      } finally {
+        setIsLoadingSkills(false);
+      }
+    };
+
+    if (authMode === 'authenticated') {
+      fetchMySkills();
     }
-  ];
+  }, [authMode]);
 
   const tradeRequests = [
     {
@@ -75,7 +98,7 @@ export default function Profile() {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative bg-white rounded-[2rem] p-8 sm:p-12 shadow-xl shadow-blue-900/5 border border-gray-100 overflow-hidden"
+        className="relative bg-white rounded-[1rem] p-8 sm:p-12 shadow-xl shadow-blue-900/5 border border-gray-100 overflow-hidden"
       >
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-blue-100 to-transparent rounded-full blur-3xl opacity-50 -z-10"></div>
 
@@ -126,7 +149,11 @@ export default function Profile() {
             <h2 className="text-2xl font-bold text-gray-900">My Active Posts</h2>
           </div>
 
-          {mySkills.length === 0 ? (
+          {isLoadingSkills ? (
+            <div className="flex justify-center p-12">
+              <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : mySkills.length === 0 ? (
             <div className="text-center p-12 bg-white rounded-[2rem] border border-dashed border-gray-200 shadow-sm">
               <p className="text-gray-500 font-medium tracking-wide">You haven&apos;t posted any skills yet.</p>
             </div>
@@ -138,15 +165,15 @@ export default function Profile() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.1 }}
                   key={skill.id}
-                  className="bg-white rounded-[2rem] border border-gray-100 shadow-sm overflow-hidden hover:shadow-lg transition-all"
+                  className="bg-white rounded-[1rem] border border-gray-100 shadow-sm overflow-hidden hover:shadow-lg transition-all"
                 >
                   <div className="p-8 sm:flex items-center justify-between gap-6">
                     <div className="flex-1">
                       <div className="text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2">Teaching</div>
-                      <h3 className="text-2xl font-extrabold text-gray-900 mb-4">{skill.teaching}</h3>
+                      <h3 className="text-2xl font-extrabold text-gray-900 mb-4">{skill.teachingSkill}</h3>
                       <div className="text-[10px] uppercase tracking-widest font-bold text-gray-400 mb-2">Wanted in return</div>
                       <div className="flex flex-wrap gap-2">
-                        {skill.wanted.map(w => (
+                        {skill.wantedSkills?.map((w: string) => (
                           <span key={w} className="px-3 py-1 bg-gray-50 border border-gray-100 rounded-lg text-sm font-semibold text-gray-700">{w}</span>
                         ))}
                       </div>
@@ -181,7 +208,7 @@ export default function Profile() {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.1 }}
                   key={req.id}
-                  className="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all"
+                  className="bg-white p-6 rounded-[1rem] border border-gray-100 shadow-sm relative overflow-hidden group hover:shadow-md transition-all"
                 >
                   <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-500 group-hover:bg-blue-600 transition-colors"></div>
 
