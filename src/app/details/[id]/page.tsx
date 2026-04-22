@@ -83,7 +83,7 @@ export default function SkillDetailPage() {
         <span className="font-medium">Back to all skills</span>
       </motion.button>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-16 items-start">
         {/* Left Side: Only Image */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
