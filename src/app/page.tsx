@@ -182,14 +182,14 @@ export default function Home() {
 
       {hasPosts ? (
         <div className="space-y-12">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {mockPosts.slice(0, 8).map((post, i) => (
               <SkillCard key={post.id} post={post} index={i} />
             ))}
           </div>
 
           <Link href="/skills">
-            <div className="flex justify-center mt-12 pb-4">
+            <div className="flex justify-center mt-8 pb-4">
               <Button size="lg" className="rounded-full px-12 font-semibold shadow-md border border-gray-200">
                 See more
               </Button>
