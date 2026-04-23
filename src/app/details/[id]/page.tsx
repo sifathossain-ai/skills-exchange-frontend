@@ -4,18 +4,11 @@ import { useParams, useRouter } from "next/navigation";
 import { fakeProducts } from "@/lib/data";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { 
-  ArrowLeft, 
-  MapPin, 
-  ArrowRightLeft, 
-  User, 
-  MessageCircle, 
-  Calendar, 
-  Share2, 
-  Bookmark,
-  ShieldCheck,
-  Star,
-  Sparkles
+import {
+  ArrowLeft,
+  MapPin,
+  ArrowRightLeft,
+
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -25,7 +18,7 @@ import { SkillPost } from "@/types";
 export default function SkillDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  
+
   const [skill, setSkill] = useState<SkillPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -88,7 +81,7 @@ export default function SkillDetailPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative aspect-square lg:aspect-auto lg:h-[600px] rounded-[2.5rem] overflow-hidden shadow-2xl ring-1 ring-black/5"
+          className="relative aspect-square lg:aspect-auto md:h-[450px] rounded-xl md:rounded-[1.5rem] overflow-hidden shadow-2xl ring-1 ring-black/5"
         >
           <Image
             src={skill.thumbnailUrl}
@@ -105,14 +98,14 @@ export default function SkillDetailPage() {
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}
-          className="space-y-10"
+          className="space-y-8"
         >
-          <div className="space-y-6">
-            <h1 className="text-4xl md:text-5xl font-black text-gray-900 leading-tight">
+          <div className="space-y-4">
+            <h1 className="text-2xl md:text-4xl font-black text-gray-900 leading-tight">
               {skill.teachingSkill}
             </h1>
-            
-            <p className="text-xl text-gray-600 leading-relaxed">
+
+            <p className="md:text-lg text-gray-600 leading-relaxed">
               {skill.description || "I can teach you modern development in exchange for some solid design help or other technical skills. Let's connect and build something amazing together."}
             </p>
           </div>
@@ -121,9 +114,9 @@ export default function SkillDetailPage() {
             <h3 className="text-sm uppercase tracking-[0.2em] font-black text-blue-600">In Exchange For</h3>
             <div className="flex flex-wrap gap-3">
               {skill.wantedSkills.map((s, i) => (
-                <div 
+                <div
                   key={i}
-                  className="px-6 py-3 rounded-2xl bg-gray-50 border border-gray-100 text-gray-900 font-bold text-base shadow-sm hover:border-blue-200 hover:bg-blue-50 transition-all cursor-default"
+                  className="md:px-6 md:py-3 px-3 py-1 rounded-md md:rounded-xl bg-gray-50 border border-gray-100 text-gray-900 font-bold text-base shadow-sm hover:border-blue-200 hover:bg-blue-50 transition-all cursor-default"
                 >
                   {s}
                 </div>
@@ -132,17 +125,17 @@ export default function SkillDetailPage() {
           </div>
 
           <div className="pt-10 flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xl font-black shadow-lg">
+            <div className="flex items-center space-x-2 md:space-x-4">
+              <div className="md:w-14 md:h-14 w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white md:text-xl font-black shadow-lg">
                 {skill.name.charAt(0)}
               </div>
               <div>
-                <div className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-0.5">Created By</div>
-                <div className="text-xl font-black text-gray-900">{skill.name}</div>
+                <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Created By</div>
+                <div className="md:text-lg font-black text-gray-900">{skill.name}</div>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-xl shadow-blue-200 transition-all cursor-pointer group">
+            <div className="flex items-center space-x-3 bg-blue-600 hover:bg-blue-700 text-white px-2 py-2 md:px-6 md:py-3 rounded-md md:rounded-xl font-black md:text-lg shadow-xl shadow-blue-200 transition-all cursor-pointer group">
               <ArrowRightLeft size={20} className="group-hover:rotate-180 transition-transform duration-500" />
               <span>Exchange</span>
             </div>
