@@ -173,7 +173,7 @@ export default function Home() {
       {/* Reviews Section */}
       <section className="py-20 mt-16 mb-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Loved by Learners Everywhere</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Loved by Learners, Praised by Peers</h2>
           <p className="text-gray-500 max-w-2xl mx-auto">Observe what our community members have to say about their skill exchange experiences.</p>
         </div>
 
