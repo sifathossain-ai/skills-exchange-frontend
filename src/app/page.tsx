@@ -185,7 +185,7 @@ export default function Home() {
                 {[1, 2, 3, 4, 5].map(star => <Star key={star} size={18} className="fill-gray-900 text-gray-900" />)}
               </div>
               <p className="text-gray-600 mb-8 leading-relaxed">
-                &quot;I learned Spanish in exchange for teaching web development. The real-time chat made coordination so easy, and I earned my first certification!&quot;
+                &quot;I learned Japanese in exchange for teaching web development. The real-time chat made coordination so easy, and I earned my first certification!&quot;
               </p>
             </div>
             <div>
