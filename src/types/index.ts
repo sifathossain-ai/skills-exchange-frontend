@@ -1,9 +1,13 @@
 export interface SkillPost {
   id: string;
-  name: string; // User Name
-  campusId: string;
   teachingSkill: string;
+  skillImage: string;
   wantedSkills: string[];
-  thumbnailUrl: string; // Mandatory field
-  description?: string; // Additional field suggested by Prompt: 'Description'
+  description: string;
+  category: string;
+  isActive: boolean;
+  name?: string; // Optional if not returned in /all
+  campusId?: string; // Optional if not returned in /all
+  createdDate: string;
+  updatedDate: string;
 }

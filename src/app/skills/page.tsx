@@ -1,19 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { Search, SearchX } from "lucide-react";
+import { Search, SearchX, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SkillCard } from "@/components/cards/SkillCard";
 import { SkillPost } from "@/types";
 
-import { fakeProducts } from "@/lib/data";
-
 export default function SkillsPage() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [skills, setSkills] = useState<SkillPost[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filteredProducts = fakeProducts.filter((product) =>
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        setIsLoading(true);
+        const token = localStorage.getItem("accessToken");
+        const headers: HeadersInit = {};
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        }
+
+        const response = await fetch("http://localhost:3000/skills/all", {
+          headers,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setSkills(data);
+          console.log(data);
+        }
+      } catch (error) {
+        console.error("Error fetching skills:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchSkills();
+  }, []);
+
+  const filteredProducts = skills.filter((product) =>
     product.teachingSkill.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -35,7 +63,12 @@ export default function SkillsPage() {
         </div>
       </div>
 
-      {filteredProducts.length > 0 ? (
+      {isLoading ? (
+        <div className="flex flex-col items-center justify-center py-20 space-y-4">
+          <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
+          <p className="text-gray-500 font-medium animate-pulse">Loading amazing skills...</p>
+        </div>
+      ) : filteredProducts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           {filteredProducts.map((product, index) => (
             <SkillCard key={product.id} post={product} index={index} />
@@ -45,7 +78,7 @@ export default function SkillsPage() {
         <EmptyState
           icon={SearchX}
           title="No skills found"
-          description={`We couldn't find any skills matching "${searchTerm}". Try a different term or create a request!`}
+          description={searchTerm ? `We couldn't find any skills matching "${searchTerm}". Try a different term or create a request!` : "There are no skills available at the moment."}
           action={<Button className="rounded-full">Request Skill</Button>}
         />
       )}

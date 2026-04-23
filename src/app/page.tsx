@@ -1,17 +1,47 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { SkillPost } from "@/types";
 import { SkillCard } from "@/components/cards/SkillCard";
 import { EmptyState } from "@/components/ui/EmptyState";
-import { SearchX, Star, ChevronDown, ArrowRight, Check } from "lucide-react";
+import { SearchX, Star, ChevronDown, ArrowRight, Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-import { fakeProducts } from "@/lib/data";
 
 export default function Home() {
-  const hasPosts = fakeProducts.length > 0;
+  const [skills, setSkills] = useState<SkillPost[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSkills = async () => {
+      try {
+        setIsLoading(true);
+        const token = localStorage.getItem("accessToken");
+        const headers: HeadersInit = {};
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        }
+
+        const response = await fetch("http://localhost:3000/skills/all", {
+          headers,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setSkills(data);
+        }
+      } catch (error) {
+        console.error("Error fetching skills:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchSkills();
+  }, []);
+
+  const hasPosts = skills.length > 0;
 
   return (
     <div className="space-y-12">
@@ -115,10 +145,14 @@ export default function Home() {
 
       </div>
 
-      {hasPosts ? (
+      {isLoading ? (
+        <div className="flex justify-center py-20">
+          <Loader2 className="w-10 h-10 text-blue-600 animate-spin" />
+        </div>
+      ) : hasPosts ? (
         <div className="space-y-12">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {fakeProducts.slice(0, 8).map((post, i) => (
+            {skills.slice(0, 8).map((post, i) => (
               <SkillCard key={post.id} post={post} index={i} />
             ))}
           </div>

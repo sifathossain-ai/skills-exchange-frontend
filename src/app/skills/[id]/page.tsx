@@ -1,13 +1,13 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { fakeProducts } from "@/lib/data";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   ArrowLeft,
   MapPin,
   ArrowRightLeft,
+  Calendar,
 
 } from "lucide-react";
 import { motion } from "framer-motion";
@@ -23,24 +23,33 @@ export default function SkillDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // In a real scenario, we would fetch from the backend
-    // const fetchSkill = async () => {
-    //   try {
-    //     const res = await fetch(`http://localhost:3001/details/${id}`);
-    //     const data = await res.json();
-    //     setSkill(data);
-    //   } catch (error) {
-    //     console.error(error);
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // };
-    // fetchSkill();
+    const fetchSkill = async () => {
+      try {
+        setIsLoading(true);
+        const token = localStorage.getItem("accessToken");
+        const headers: HeadersInit = {};
+        if (token) {
+          headers["Authorization"] = `Bearer ${token}`;
+        }
 
-    // For now, using fake data as requested
-    const foundSkill = fakeProducts.find((p) => p.id === id);
-    setSkill(foundSkill || null);
-    setIsLoading(false);
+        const res = await fetch(`http://localhost:3000/skills/${id}`, {
+          headers,
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setSkill(data);
+        }
+      } catch (error) {
+        console.error("Error fetching skill details:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    if (id) {
+      fetchSkill();
+    }
   }, [id]);
 
   if (isLoading) {
@@ -81,10 +90,10 @@ export default function SkillDetailPage() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative aspect-square lg:aspect-auto md:h-[450px] rounded-xl md:rounded-[1.5rem] overflow-hidden shadow-2xl ring-1 ring-black/5"
+          className="relative aspect-square lg:aspect-auto md:h-[450px] rounded-xl md:rounded-[1.5rem] overflow-hidden shadow-xl ring-1 ring-black/5"
         >
           <Image
-            src={skill.thumbnailUrl}
+            src={skill.skillImage}
             alt={skill.teachingSkill}
             fill
             className="object-cover"
@@ -101,6 +110,15 @@ export default function SkillDetailPage() {
           className="space-y-8"
         >
           <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2 text-blue-600 font-bold text-sm uppercase tracking-widest">
+                <span>{skill.category}</span>
+              </div>
+              <div className="flex items-center space-x-1.5 text-gray-400 text-xs font-semibold">
+                <Calendar size={14} />
+                <span>{new Date(skill.createdDate).toLocaleDateString()}</span>
+              </div>
+            </div>
             <h1 className="text-2xl md:text-4xl font-black text-gray-900 leading-tight">
               {skill.teachingSkill}
             </h1>
@@ -127,11 +145,11 @@ export default function SkillDetailPage() {
           <div className="pt-10 flex items-center justify-between">
             <div className="flex items-center space-x-2 md:space-x-4">
               <div className="md:w-14 md:h-14 w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white md:text-xl font-black shadow-lg">
-                {skill.name.charAt(0)}
+                {(skill.creator.name || "S").charAt(0)}
               </div>
               <div>
                 <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Created By</div>
-                <div className="md:text-lg font-black text-gray-900">{skill.name}</div>
+                <div className="md:text-lg font-black text-gray-900">{skill.creator.name || "Student"}</div>
               </div>
             </div>
 
