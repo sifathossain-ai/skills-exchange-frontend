@@ -174,7 +174,7 @@ export default function Home() {
       <section className="py-20 mt-16 mb-4">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Loved by Learners Everywhere</h2>
-          <p className="text-gray-500 max-w-2xl mx-auto">See what our community members have to say about their skill exchange experiences.</p>
+          <p className="text-gray-500 max-w-2xl mx-auto">Observe what our community members have to say about their skill exchange experiences.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
