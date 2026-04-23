@@ -8,7 +8,9 @@ import {
   MapPin,
   ArrowRightLeft,
   Calendar,
-
+  Check,
+  Loader2,
+  X,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -21,6 +23,9 @@ export default function SkillDetailPage() {
 
   const [skill, setSkill] = useState<SkillPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedSkillNames, setSelectedSkillNames] = useState<string[]>([]);
+  const [isRequesting, setIsRequesting] = useState(false);
+  const [requestStatus, setRequestStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   useEffect(() => {
     const fetchSkill = async () => {
@@ -51,6 +56,51 @@ export default function SkillDetailPage() {
       fetchSkill();
     }
   }, [id]);
+
+  const toggleSkillSelection = (skillName: string) => {
+    setSelectedSkillNames(prev => 
+      prev.includes(skillName) 
+        ? prev.filter(s => s !== skillName)
+        : [...prev, skillName]
+    );
+  };
+
+  const handleExchangeRequest = async () => {
+    if (selectedSkillNames.length === 0) return;
+
+    try {
+      setIsRequesting(true);
+      setRequestStatus('idle');
+      const token = localStorage.getItem("accessToken");
+      
+      const res = await fetch("http://localhost:3000/exchange-skills/request", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          postId: id,
+          skillOffered: selectedSkillNames.join(", ")
+        }),
+      });
+
+      if (res.ok) {
+        setRequestStatus('success');
+        setTimeout(() => {
+          setRequestStatus('idle');
+          setSelectedSkillNames([]);
+        }, 3000);
+      } else {
+        setRequestStatus('error');
+      }
+    } catch (error) {
+      console.error("Error sending exchange request:", error);
+      setRequestStatus('error');
+    } finally {
+      setIsRequesting(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -109,7 +159,6 @@ export default function SkillDetailPage() {
           transition={{ delay: 0.2 }}
           className="space-y-8"
         >
-<<<<<<< HEAD:src/app/skills/[id]/page.tsx
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2 text-blue-600 font-bold text-sm uppercase tracking-widest">
@@ -121,10 +170,6 @@ export default function SkillDetailPage() {
               </div>
             </div>
             <h1 className="text-2xl md:text-4xl font-black text-gray-900 leading-tight">
-=======
-          <div className="space-y-6">
-            <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 leading-tight">
->>>>>>> 7803c6fd2262e8266f9ab48b6a4c654bfd5111ab:src/app/details/[id]/page.tsx
               {skill.teachingSkill}
             </h1>
 
@@ -136,31 +181,68 @@ export default function SkillDetailPage() {
           <div className="space-y-4 pt-8 border-t border-gray-100">
             <h3 className="text-sm uppercase tracking-[0.2em] font-black text-blue-600">In Exchange For</h3>
             <div className="flex flex-wrap gap-3">
-              {skill.wantedSkills.map((s, i) => (
-                <div
-                  key={i}
-                  className="md:px-6 md:py-3 px-3 py-1 rounded-md md:rounded-xl bg-gray-50 border border-gray-100 text-gray-900 font-bold text-base shadow-sm hover:border-blue-200 hover:bg-blue-50 transition-all cursor-default"
-                >
-                  {s}
-                </div>
-              ))}
+              {skill.wantedSkills.map((s, i) => {
+                const isSelected = selectedSkillNames.includes(s);
+                return (
+                  <div
+                    key={i}
+                    onClick={() => toggleSkillSelection(s)}
+                    className={`md:px-6 md:py-3 px-3 py-1 rounded-md md:rounded-xl border font-bold text-base shadow-sm transition-all cursor-pointer flex items-center space-x-2 ${
+                      isSelected 
+                        ? "bg-blue-600 border-blue-600 text-white shadow-blue-100 scale-105" 
+                        : "bg-white border-gray-100 text-gray-900 hover:border-blue-200 hover:bg-blue-50"
+                    }`}
+                  >
+                    {isSelected && <Check size={16} strokeWidth={3} />}
+                    <span>{s}</span>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
-          <div className="pt-10 flex items-center justify-between">
-            <div className="flex items-center space-x-2 md:space-x-4">
-              <div className="md:w-14 md:h-14 w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white md:text-xl font-black shadow-lg">
-                {(skill.creator?.name || "S").charAt(0)}
+          <div className="pt-10 space-y-6">
+            {requestStatus === 'success' && (
+              <div className="flex items-center space-x-2 text-green-600 bg-green-50 p-4 rounded-xl font-bold text-sm animate-in fade-in slide-in-from-top-2 border border-green-100">
+                <Check size={18} />
+                <span>Exchange request sent successfully!</span>
               </div>
-              <div>
-                <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Created By</div>
-                <div className="md:text-lg font-black text-gray-900">{skill.creator?.name || "Student"}</div>
+            )}
+            
+            {requestStatus === 'error' && (
+              <div className="flex items-center space-x-2 text-red-600 bg-red-50 p-4 rounded-xl font-bold text-sm animate-in fade-in slide-in-from-top-2 border border-red-100">
+                <X size={18} />
+                <span>Failed to send request. Please try again.</span>
               </div>
-            </div>
+            )}
 
-            <div className="flex items-center space-x-3 bg-blue-600 hover:bg-blue-700 text-white px-2 py-2 md:px-6 md:py-3 rounded-md md:rounded-xl font-black md:text-lg shadow-xl shadow-blue-200 transition-all cursor-pointer group">
-              <ArrowRightLeft size={20} className="group-hover:rotate-180 transition-transform duration-500" />
-              <span>Exchange</span>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2 md:space-x-4">
+                <div className="md:w-14 md:h-14 w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white md:text-xl font-black shadow-lg">
+                  {(skill.creator?.name || "S").charAt(0)}
+                </div>
+                <div>
+                  <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Created By</div>
+                  <div className="md:text-lg font-black text-gray-900">{skill.creator?.name || "Student"}</div>
+                </div>
+              </div>
+
+              <button 
+                onClick={handleExchangeRequest}
+                disabled={isRequesting || selectedSkillNames.length === 0}
+                className={`flex items-center space-x-3 px-4 py-2 md:px-8 md:py-4 rounded-md md:rounded-xl font-black md:text-lg transition-all shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none group ${
+                  selectedSkillNames.length > 0 
+                    ? "bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200" 
+                    : "bg-gray-100 text-gray-400 shadow-none"
+                }`}
+              >
+                {isRequesting ? (
+                  <Loader2 size={20} className="animate-spin" />
+                ) : (
+                  <ArrowRightLeft size={20} className={selectedSkillNames.length > 0 ? "group-hover:rotate-180 transition-transform duration-500" : ""} />
+                )}
+                <span>{isRequesting ? "Sending..." : "Exchange"}</span>
+              </button>
             </div>
           </div>
         </motion.div>

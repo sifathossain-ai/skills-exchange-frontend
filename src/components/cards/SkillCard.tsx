@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { MapPin, ArrowRightLeft, Sparkles } from "lucide-react";
+import { MapPin, ArrowRightLeft, Sparkles, ArrowRight } from "lucide-react";
 import { SkillPost } from "@/types";
 import { motion } from "framer-motion";
 
@@ -75,13 +75,10 @@ export function SkillCard({ post, index = 0 }: SkillCardProps) {
 
           <CardFooter className="px-4 py-3 bg-gray-50/30 border-t border-gray-50 flex items-center justify-between relative z-10">
             <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-100 to-indigo-100 flex items-center justify-center text-blue-700 font-black text-sm shadow-inner ring-1 ring-black/5">
-                {post.creator?.name?.charAt(0) || "U"}
-              </div>
-              <span className="text-sm font-bold text-gray-900">{post.creator?.name || "Student"}</span>
+              <span className="text-sm font-bold text-gray-900">More Details</span>
             </div>
             <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm border border-gray-100 text-gray-400 group-hover:text-primary group-hover:border-primary/20 group-hover:shadow-md transition-all">
-              <ArrowRightLeft size={14} />
+              <ArrowRight size={14} />
             </div>
           </CardFooter>
         </Card>

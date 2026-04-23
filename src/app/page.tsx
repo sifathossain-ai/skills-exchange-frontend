@@ -57,9 +57,6 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 max-w-3xl mx-auto flex flex-col items-center">
-          <div className="inline-flex items-center space-x-2 bg-gray-50 border border-gray-200 px-4 py-1.5 rounded-full text-gray-800 text-sm font-semibold mb-8">
-            <span>Join the Community</span>
-          </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 tracking-tight mb-6 leading-tight">
             Learn New Skills by<br className="hidden sm:block" /> Trading Your Expertise
