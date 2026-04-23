@@ -3,9 +3,22 @@
 import Link from "next/link";
 import { Plus, Search } from "lucide-react";
 import { useModal } from "@/context/ModalContext";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 export function TopNav() {
   const { openCreatePost } = useModal();
+  const router = useRouter();
+
+  const handleCreatePostClick = () => {
+    const token = localStorage.getItem("accessToken");
+    if (token && token !== "null" && token !== "undefined") {
+      openCreatePost();
+    } else {
+      toast.error("You must be logged in to create a post");
+      router.push("/profile");
+    }
+  };
 
   return (
     <div className="hidden md:flex fixed top-6 w-full z-50 justify-center pointer-events-none px-4">
@@ -45,7 +58,7 @@ export function TopNav() {
               <Search size={20} />
             </Link>
             <button
-              onClick={openCreatePost}
+              onClick={handleCreatePostClick}
               className="group relative h-10 px-5 inline-flex items-center justify-center rounded-full text-sm font-semibold transition-all bg-gray-900 text-white hover:bg-gray-800 hover:shadow-lg hover:-translate-y-0.5"
             >
               <Plus

@@ -7,24 +7,36 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { SkillCard } from "@/components/cards/SkillCard";
 import { SkillPost } from "@/types";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
+import { useModal } from "@/context/ModalContext";
 
 export default function SkillsPage() {
+  const router = useRouter();
+  const { openCreatePost } = useModal();
   const [searchTerm, setSearchTerm] = useState("");
   const [skills, setSkills] = useState<SkillPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleCreateClick = () => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      openCreatePost();
+    } else {
+      toast.error("You must be logged in to create a post");
+      router.push("/profile");
+    }
+  };
 
   useEffect(() => {
     const fetchSkills = async () => {
       try {
         setIsLoading(true);
         const token = localStorage.getItem("accessToken");
-        const headers: HeadersInit = {};
-        if (token) {
-          headers["Authorization"] = `Bearer ${token}`;
-        }
+        const hasToken = token && token !== "null" && token !== "undefined";
 
         const response = await fetch("http://localhost:3000/skills/all", {
-          headers,
+          ...(hasToken ? { headers: { "Authorization": `Bearer ${token}` } } : {})
         });
 
         if (response.ok) {
@@ -79,7 +91,7 @@ export default function SkillsPage() {
           icon={SearchX}
           title="No skills found"
           description={searchTerm ? `We couldn't find any skills matching "${searchTerm}". Try a different term or create a request!` : "There are no skills available at the moment."}
-          action={<Button className="rounded-full">Request Skill</Button>}
+          action={<Button onClick={handleCreateClick} className="rounded-full">Request Skill</Button>}
         />
       )}
     </div>

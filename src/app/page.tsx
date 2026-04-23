@@ -19,13 +19,10 @@ export default function Home() {
       try {
         setIsLoading(true);
         const token = localStorage.getItem("accessToken");
-        const headers: HeadersInit = {};
-        if (token) {
-          headers["Authorization"] = `Bearer ${token}`;
-        }
+        const hasToken = token && token !== "null" && token !== "undefined";
 
         const response = await fetch("http://localhost:3000/skills/all", {
-          headers,
+          ...(hasToken ? { headers: { "Authorization": `Bearer ${token}` } } : {})
         });
 
         if (response.ok) {

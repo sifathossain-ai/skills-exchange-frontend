@@ -16,6 +16,7 @@ import { motion } from "framer-motion";
 
 import { useState, useEffect } from "react";
 import { SkillPost } from "@/types";
+import { toast } from "react-toastify";
 
 export default function SkillDetailPage() {
   const { id } = useParams();
@@ -32,13 +33,10 @@ export default function SkillDetailPage() {
       try {
         setIsLoading(true);
         const token = localStorage.getItem("accessToken");
-        const headers: HeadersInit = {};
-        if (token) {
-          headers["Authorization"] = `Bearer ${token}`;
-        }
+        const hasToken = token && token !== "null" && token !== "undefined";
 
         const res = await fetch(`http://localhost:3000/skills/${id}`, {
-          headers,
+          ...(hasToken ? { headers: { "Authorization": `Bearer ${token}` } } : {})
         });
 
         if (res.ok) {
@@ -68,10 +66,16 @@ export default function SkillDetailPage() {
   const handleExchangeRequest = async () => {
     if (selectedSkillNames.length === 0) return;
 
+    const token = localStorage.getItem("accessToken");
+    if (!token || token === "null" || token === "undefined") {
+      toast.error("You must be logged in to request an exchange");
+      router.push("/profile");
+      return;
+    }
+
     try {
       setIsRequesting(true);
       setRequestStatus('idle');
-      const token = localStorage.getItem("accessToken");
       
       const res = await fetch("http://localhost:3000/exchange-skills/request", {
         method: "POST",
