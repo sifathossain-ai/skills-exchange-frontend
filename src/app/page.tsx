@@ -189,7 +189,7 @@ export default function Home() {
               </p>
             </div>
             <div>
-              <h4 className="font-bold text-gray-900">Sarah Chen</h4>
+              <h4 className="font-bold text-gray-900">Sarah Rahman</h4>
               <p className="text-sm text-gray-500">Software Developer</p>
             </div>
           </div>
