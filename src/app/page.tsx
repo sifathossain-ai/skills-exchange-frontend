@@ -67,7 +67,7 @@ export default function Home() {
 
             <Link href="/skills">
               <Button size="lg" className="bg-gray-900 text-white hover:bg-gray-800 font-semibold rounded-full px-8 h-12 shadow-md w-full sm:w-auto transition-all">
-                Browse You Require Skills <ArrowRight size={18} className="ml-2" />
+                Browse Your Needed Skills <ArrowRight size={18} className="ml-2" />
               </Button>
             </Link>
           </div>
