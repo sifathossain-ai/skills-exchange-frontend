@@ -145,11 +145,11 @@ export default function SkillDetailPage() {
           <div className="pt-10 flex items-center justify-between">
             <div className="flex items-center space-x-2 md:space-x-4">
               <div className="md:w-14 md:h-14 w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white md:text-xl font-black shadow-lg">
-                {(skill.creator.name || "S").charAt(0)}
+                {(skill.creator?.name || "S").charAt(0)}
               </div>
               <div>
                 <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-0.5">Created By</div>
-                <div className="md:text-lg font-black text-gray-900">{skill.creator.name || "Student"}</div>
+                <div className="md:text-lg font-black text-gray-900">{skill.creator?.name || "Student"}</div>
               </div>
             </div>
 

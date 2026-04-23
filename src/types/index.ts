@@ -8,6 +8,9 @@ export interface SkillPost {
   isActive: boolean;
   name?: string; // Optional if not returned in /all
   campusId?: string; // Optional if not returned in /all
+  creator?: {
+    name: string;
+  };
   createdDate: string;
   updatedDate: string;
 }
