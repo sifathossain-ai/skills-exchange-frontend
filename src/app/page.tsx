@@ -190,7 +190,7 @@ export default function Home() {
             </div>
             <div>
               <h4 className="font-bold text-gray-900">Sarah Rahman</h4>
-              <p className="text-sm text-gray-500">Software Developer</p>
+              <p className="text-sm text-gray-500">Web Developer</p>
             </div>
           </div>
 
