@@ -60,7 +60,7 @@ export default function Home() {
           </h1>
 
           <p className="text-lg text-gray-500 mb-10 max-w-2xl leading-relaxed">
-            Exchange connects you with people who want to learn what you know, and teach what you want to learn. Exchange skills, earn badges, and grow together.
+            Connects you with people who want to learn what you know, and teach what you want to learn. Exchange skills, earn badges, and grow together.
           </p>
 
           <div className="flex sm:flex-row flex-col gap-4 mb-10 w-full sm:w-auto justify-center items-center">
