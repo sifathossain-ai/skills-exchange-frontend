@@ -109,6 +109,7 @@ export default function SkillDetailPage() {
           transition={{ delay: 0.2 }}
           className="space-y-8"
         >
+<<<<<<< HEAD:src/app/skills/[id]/page.tsx
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2 text-blue-600 font-bold text-sm uppercase tracking-widest">
@@ -120,6 +121,10 @@ export default function SkillDetailPage() {
               </div>
             </div>
             <h1 className="text-2xl md:text-4xl font-black text-gray-900 leading-tight">
+=======
+          <div className="space-y-6">
+            <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 leading-tight">
+>>>>>>> 7803c6fd2262e8266f9ab48b6a4c654bfd5111ab:src/app/details/[id]/page.tsx
               {skill.teachingSkill}
             </h1>
 
