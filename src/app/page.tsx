@@ -84,7 +84,7 @@ export default function Home() {
       <section className="py-16 relative">
         <div className="text-center mb-16">
           <div className="inline-block px-4 py-1.5 rounded-full bg-gray-100 text-gray-800 text-xs font-bold uppercase tracking-wider mb-6">How It Works</div>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Start Exchanging in 3 Easy Steps</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Start Exchanging Skills in 3 Easy Steps</h2>
           <p className="text-gray-500 max-w-xl mx-auto">Join our community and begin your learning journey in minutes.</p>
         </div>
 
