@@ -7,6 +7,9 @@ import { useState, useEffect } from "react";
 import { LoginModule } from "@/components/auth/LoginModule";
 import { RegisterModule } from "@/components/auth/RegisterModule";
 import { Input } from "@/components/ui/input";
+import { toast } from "react-toastify";
+import { MdCancel, MdDeleteOutline } from "react-icons/md";
+import { Modal } from "@/components/ui/modal";
 
 export default function Profile() {
   const [isMounted, setIsMounted] = useState(false);
@@ -19,6 +22,9 @@ export default function Profile() {
 
   const [mySkills, setMySkills] = useState<any[]>([]);
   const [isLoadingSkills, setIsLoadingSkills] = useState(true);
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [skillToDelete, setSkillToDelete] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     setIsMounted(true);
@@ -83,6 +89,40 @@ export default function Profile() {
       fetchMySkills();
     }
   }, [authMode]);
+
+  const deleteSkill = (id: string, skillName: string) => {
+    setSkillToDelete({ id, name: skillName });
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = async (id: string) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) {
+        toast.error("You must be logged in to delete a skill");
+        return;
+      }
+
+      const res = await fetch(`http://localhost:3000/skills/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        setMySkills((prev) => prev.filter((skill) => skill.id !== id));
+        toast.success("Skill deleted successfully");
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        toast.error(errorData.message || "Failed to delete skill");
+      }
+    } catch (error) {
+      console.error("Error deleting skill:", error);
+      toast.error("An error occurred while deleting the skill");
+    }
+  };
+
 
   const handleEdit = () => {
     setTempName(user?.name || "");
@@ -262,7 +302,7 @@ export default function Profile() {
                       <Button variant="outline" className="flex-1 justify-center rounded-xl border-gray-200">
                         <Edit size={16} className="mr-2" /> Edit
                       </Button>
-                      <Button variant="destructive" className="flex-1 justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-100 border-none shadow-none">
+                      <Button onClick={() => deleteSkill(skill.id, skill.teachingSkill)} variant="destructive" className="flex-1 justify-center rounded-xl bg-red-50 text-red-600 hover:bg-red-100 border-none shadow-none">
                         <Trash2 size={16} className="mr-2" /> Delete
                       </Button>
                     </div>
@@ -321,6 +361,46 @@ export default function Profile() {
           </div>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal - Square & Middle Positioned */}
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        className="max-w-[420px] p-0 overflow-hidden border-none shadow-[0_20px_50px_rgba(0,0,0,0.2)] rounded-xl md:rounded-[1.5rem] bg-white animate-in zoom-in-95 duration-200"
+      >
+        <div className="flex flex-col items-center text-center p-4 md:p-6">
+          <div className="w-14 h-14 bg-red-50 rounded-[1rem] flex items-center justify-center mb-6 text-red-500 relative">
+            <div className="absolute inset-0 bg-red-500/10 rounded-[2rem] animate-ping opacity-20"></div>
+            <MdDeleteOutline size={28} className="relative z-10" />
+          </div>
+
+          <p className="text-gray-500 mb-4 md:mb-6 leading-relaxed text-lg">
+            Are you sure you want to delete <span className="font-extrabold text-gray-900 block mt-1">"{skillToDelete?.name}"</span>?
+          </p>
+
+          <div className="flex w-full gap-4">
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteModalOpen(false)}
+              className="flex-1 h-12 rounded-xl font-bold border-gray-200 text-gray-500 hover:bg-gray-50 flex items-center justify-center gap-2 text-base transition-all"
+            >
+              <MdCancel size={22} />
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                if (skillToDelete) handleConfirmDelete(skillToDelete.id);
+                setIsDeleteModalOpen(false);
+              }}
+              className="flex-1 h-12 rounded-xl font-black bg-red-600 hover:bg-red-700 text-white shadow-xl shadow-red-200 flex items-center justify-center gap-2 text-base transition-all hover:scale-[1.02] active:scale-95"
+            >
+              <MdDeleteOutline size={22} />
+              Delete
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
