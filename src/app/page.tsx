@@ -74,7 +74,7 @@ export default function Home() {
 
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-3 text-sm text-gray-500 font-medium">
             <span className="flex items-center"><Check size={16} className="mr-1.5 text-gray-900" /> Free to join</span>
-            <span className="flex items-center"><Check size={16} className="mr-1.5 text-gray-900" /> No subscriptions</span>
+            <span className="flex items-center"><Check size={16} className="mr-1.5 text-gray-900" /> No active subscriptions</span>
             <span className="flex items-center"><Check size={16} className="mr-1.5 text-gray-900" /> Real connections</span>
           </div>
         </div>
