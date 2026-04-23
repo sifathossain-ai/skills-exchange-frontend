@@ -108,7 +108,7 @@ export default function SkillDetailPage() {
           className="space-y-10"
         >
           <div className="space-y-6">
-            <h1 className="text-4xl md:text-6xl font-black tracking-tight text-gray-900 leading-tight">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
               {skill.teachingSkill}
             </h1>
             
