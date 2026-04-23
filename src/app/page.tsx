@@ -132,7 +132,7 @@ export default function Home() {
         <div className="flex items-center space-x-3">
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center">
-              Trending Exchanges
+              Trending Skill Exchanges
             </h2>
           </div>
         </div>
