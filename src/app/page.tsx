@@ -103,7 +103,7 @@ export default function Home() {
                 <span className="relative z-10 drop-shadow-md">01</span>
               </div>
               <h3 className="text-xl font-extrabold text-gray-900 mb-3">Create Your Profile</h3>
-              <p className="text-gray-500 text-sm leading-relaxed px-4">Sign up with secure authentication and list the skills you have and want to learn.</p>
+              <p className="text-gray-500 text-sm leading-relaxed px-4">Sign up with secure authentication and list the skills that you have and want to learn.</p>
             </div>
             {/* Step 2 */}
             <div className="flex flex-col items-center">
