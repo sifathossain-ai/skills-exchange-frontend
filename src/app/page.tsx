@@ -112,7 +112,7 @@ export default function Home() {
                 <span className="relative z-10 drop-shadow-md">02</span>
               </div>
               <h3 className="text-xl font-extrabold text-gray-900 mb-3">Find & Connect</h3>
-              <p className="text-gray-500 text-sm leading-relaxed px-4">Browse skills, send exchange requests, and chat in real-time with potential peers.</p>
+              <p className="text-gray-500 text-sm leading-relaxed px-4">Browse skills, send exchange requests, and connect with potential partners.</p>
             </div>
             {/* Step 3 */}
             <div className="flex flex-col items-center">
