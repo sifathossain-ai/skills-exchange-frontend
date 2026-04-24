@@ -121,7 +121,7 @@ export default function Home() {
                 <span className="relative z-10 drop-shadow-md">03</span>
               </div>
               <h3 className="text-xl font-extrabold text-gray-900 mb-3">Learn & Earn</h3>
-              <p className="text-gray-500 text-sm leading-relaxed px-4">Complete skill exchanges, earn badges, and collect certifications as you grow.</p>
+              <p className="text-gray-500 text-sm leading-relaxed px-4">Complete skill exchanges connections, learn new skills and upgrade your life.</p>
             </div>
           </div>
         </div>
