@@ -112,7 +112,7 @@ export default function Home() {
                 <span className="relative z-10 drop-shadow-md">02</span>
               </div>
               <h3 className="text-xl font-extrabold text-gray-900 mb-3">Find & Connect</h3>
-              <p className="text-gray-500 text-sm leading-relaxed px-4">Browse skills, send exchange requests, and chat in real-time with potential partners.</p>
+              <p className="text-gray-500 text-sm leading-relaxed px-4">Browse skills, send exchange requests, and chat in real-time with potential peers.</p>
             </div>
             {/* Step 3 */}
             <div className="flex flex-col items-center">
@@ -132,7 +132,7 @@ export default function Home() {
         <div className="flex items-center space-x-3">
           <div>
             <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center">
-              Trending Exchanges
+              Trending Skill Exchanges
             </h2>
           </div>
         </div>
@@ -173,7 +173,7 @@ export default function Home() {
       {/* Reviews Section */}
       <section className="py-20 mt-16 mb-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Loved by Learners Everywhere</h2>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">Loved by Learners, Praised by Peers</h2>
           <p className="text-gray-500 max-w-2xl mx-auto">Observe what our community members have to say about their skill exchange experiences.</p>
         </div>
 
